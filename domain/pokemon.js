@@ -1,4 +1,4 @@
-const pokeAPI_URL = process.env.POKEMON_API_URL
+const pokeAPI_URL = require("../utils/config.js")
 
 const getAllPokemonPokeAPI = async () => {
     const request = {
@@ -12,7 +12,7 @@ const getAllPokemonPokeAPI = async () => {
     return response.json()
 }
 
-const getPokemonById = async (id) => {
+const getPokemonByIdApi = async (id) => {
     const request = {
         method: "GET",
         headers: {
@@ -24,19 +24,19 @@ const getPokemonById = async (id) => {
     return response.json()
 }
 
-const getPokemonAbilitiesById = async (id) => {
+const getPokemonAbilitiesByIdApi = async (id) => {
     const request = {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
         }
     }
-    const response = await fetch(`${pokeAPI_URL}/ability/id`, request)
+    const response = await fetch(`${pokeAPI_URL}/ability/${id}`, request)
     return response.json()
 }
 
 module.exports = {
     getAllPokemonPokeAPI,
-    getPokemonById,
-    getPokemonAbilitiesById
+    getPokemonByIdApi,
+    getPokemonAbilitiesByIdApi
 }
