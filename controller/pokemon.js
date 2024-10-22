@@ -14,14 +14,12 @@ const getAllPokemon = async (req, res) => {
 
 
 const getPokemonById = async (req, res) => {
-    const {
-        id,
-        name
-    } = req.body
+    const { name } = req.body
+    const pokemonId = Number(req.params.id)
 
     try {
         validateUserInput(id, name)
-        const found = await getPokemonById(Number(id))
+        const found = await getPokemonById(pokemonId)
 
         if(!found) {
             return dataResponse(res, 404, { error: ERR.POKEMON_ID_NOT_FOUND })
@@ -33,11 +31,11 @@ const getPokemonById = async (req, res) => {
 }
 
 const getPokemonAbilitiesById = async (req, res) => {
-    const { id } = req.body
+    const pokemonId = Number(req.params.id)
 
     try {
         validateUserInput(id, null)
-        const found = await getPokemonAbilitiesById(Number(id))
+        const found = await getPokemonAbilitiesById(pokemonId)
         if(!found) {
             return dataResponse(res, 404, { error: ERR.POKEMON_ABILITIES_NOT_FOUND })
         }
@@ -48,5 +46,7 @@ const getPokemonAbilitiesById = async (req, res) => {
 }
 
 module.exports = {
-    getAllPokemon
+    getAllPokemon,
+    getPokemonById,
+    getPokemonAbilitiesById
 }
