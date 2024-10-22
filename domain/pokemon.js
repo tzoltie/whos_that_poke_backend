@@ -7,24 +7,36 @@ const getAllPokemonPokeAPI = async () => {
             'Content-Type': 'application/json',
         }
     }
-    const response = await fetch(`${pokeAPI_URL}`, request)
+    const response = await fetch(`${pokeAPI_URL}/pokemon`, request)
     
     return response.json()
 }
 
-const getPokemonById = async (route) => {
+const getPokemonById = async (id) => {
     const request = {
         method: "GET",
         headers: {
             'Content-Type': 'application/json',
         }
     }
-    const response = await fetch(`${pokeAPI_URL}/${route}`, request)
+    const response = await fetch(`${pokeAPI_URL}/pokemon/${id}`, request)
 
+    return response.json()
+}
+
+const getPokemonAbilitiesById = async (id) => {
+    const request = {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }
+    const response = await fetch(`${pokeAPI_URL}/ability/id`, request)
     return response.json()
 }
 
 module.exports = {
     getAllPokemonPokeAPI,
-    getPokemonById
+    getPokemonById,
+    getPokemonAbilitiesById
 }
