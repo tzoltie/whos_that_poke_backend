@@ -7,7 +7,7 @@ const getAllPokemonPokeAPI = async () => {
             'Content-Type': 'application/json',
         }
     }
-    const response = await fetch(`${pokeAPI_URL}/pokemon`, request)
+    const response = await fetch(`${pokeAPI_URL}/pokemon/?limit=50&offset=50`, request)
     
     return response.json()
 }

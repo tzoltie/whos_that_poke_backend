@@ -6,7 +6,7 @@ const ERR = require("../utils/errorMessages.js")
 const getAllPokemon = async (req, res) => {
     try {
         const allPokemon = await getAllPokemonPokeAPI()
-        return dataResponse(res, 200, { results: allPokemon })
+        return dataResponse(res, 200, { apiResults: allPokemon })
     } catch (e) {
         return dataResponse(res, 404, { error: ERR.POKEMON_API_FAIL })
     }
@@ -18,11 +18,24 @@ const getPokemonById = async (req, res) => {
 
     try {
         const found = await getPokemonByIdApi(pokemonId)
+        const pokemonList = await getAllPokemonPokeAPI()
+        const nameList = pokemonList.results
+        let pokemonNameList = []
+        while(pokemonNameList.length < 3) {
+            const namePicker = nameList[Math.floor(Math.random() * nameList.length)]
+            const alreadySelected = pokemonNameList.find((poke) => poke.name === namePicker.name)
+            if(!alreadySelected) {
+                pokemonNameList.push(namePicker)
+            }
+        }
+        pokemonNameList.push(found.species)
 
+        const scrambleNames = pokemonNameList.sort(() => Math.random() - 0.5)
+        
         if(!found) {
             return dataResponse(res, 404, { error: ERR.POKEMON_ID_NOT_FOUND })
         }
-        return dataResponse(res, 200, { results: found })
+        return dataResponse(res, 200, { apiResults: "poke-found", pokemon: { id: found.id, image: found.sprites.front_default}, names: scrambleNames })
     } catch(e) {
         return dataResponse(res, 500, { error: e.message })
     }
@@ -36,7 +49,7 @@ const getPokemonAbilitiesById = async (req, res) => {
         if(!found) {
             return dataResponse(res, 404, { error: ERR.POKEMON_ABILITIES_NOT_FOUND })
         }
-        return dataResponse(res, 200, { results: found })
+        return dataResponse(res, 200, { apiResults: found })
     } catch(e) {
         return dataResponse(res, 500, { error: e.message })
     }
@@ -64,9 +77,9 @@ const userAnswer = async (req, res) => {
         }
 
         if(found.name === name) {
-            return dataResponse(res, 201, { results: "correct!", pokemon: { name: found.name, image: found.sprites.front_default, abilites: abilitiesDesc }})
+            return dataResponse(res, 201, { apiResults: "correct!", pokemon: { name: found.name, image: found.sprites.front_default, abilites: abilitiesDesc, hp: found.stats[0].base_stat }})
         } else {
-            return dataResponse(res, 201, { results: "incorrect!", pokemon: { name: found.name, image: found.sprites.front_default, abilites: abilitiesDesc }})
+            return dataResponse(res, 201, { apiResults: "incorrect!", pokemon: { name: found.name, image: found.sprites.front_default, abilites: abilitiesDesc, hp: found.stats[0].base_stat }})
         }
     } catch(e) {
         return dataResponse(res, 500, { error: ERR.SOMETHING_WENT_WRONG })
